@@ -20,17 +20,20 @@ from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
 )
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path(
+        '',
+        SpectacularSwaggerView.as_view(url_name='api-schema'),
+        name='api-docs',
+    ),
 ]
 
 if settings.DEBUG:
-    urlpatterns += [
-        path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
-        path(
-            '',
-            SpectacularSwaggerView.as_view(url_name='api-schema'),
-            name='api-docs',
-        ),
-    ]
+    urlpatterns += static(  # simulate Django development server behaviour
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )

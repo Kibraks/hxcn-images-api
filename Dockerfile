@@ -17,8 +17,10 @@ RUN apk add --update --no-cache postgresql-client && \
     adduser \
         --disabled-password \
         --no-create-home \
-        django-user
-
-ENV PATH="/py/bin:$PATH"
+        django-user && \
+        mkdir -p /vol/web/media && \
+        mkdir -p /vol/web/static && \
+        chown -R django-user:django-user /vol && \
+        chmod -R 755 /vol
 
 USER django-user
